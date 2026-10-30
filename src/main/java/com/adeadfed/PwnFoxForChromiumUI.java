@@ -215,6 +215,8 @@ public class PwnFoxForChromiumUI {
     }
 
     private boolean areSettingsValid() {
+        // coloured like the other paths, but optional: a wrong path only skips the carry-over
+        burpBrowserDataPath.getInputVerifier().verify(burpBrowserDataPath);
         return pwnChromeExePath.getInputVerifier().verify(pwnChromeExePath) &&
                 pwnChromeProfilesPath.getInputVerifier().verify(pwnChromeProfilesPath);
     }
