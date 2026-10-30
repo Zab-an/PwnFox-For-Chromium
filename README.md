@@ -30,6 +30,9 @@ v1.2.0 release of PwnFox For Chromium automatically prepopulates the default set
 2. Path to the PwnFox For Chromium profile data directory
 > Directory where browser data from the extension will be stored. Default value - `.PwnChromiumData`; You can set this setting to a different value to keep your work on the current project separated from the other ones.
 
+3. Path to the Burp browser data directory
+> Directory where Burp's browser keeps its data. Default value - `~/.BurpSuite/pre-wired-browser` (`%APPDATA%\BurpSuite\pre-wired-browser` on Windows); set it if you chose another folder in Burp's settings, and keep "Store browser data" enabled there. With the Burp Browser executable, every profile launch takes the Burp browser's extensions and their settings, its browser settings and its bookmarks, and loads Burp's built-in extensions such as DOM Invader, so make those changes in Burp's browser. Cookies, logins, history and autofill data are never carried over. On Windows, an existing profile is logged out of websites once, on its first launch after this change.
+
 ## Burp Browser location
 You can use Burp's built-in browser to deploy PwnFox for Chromium. Here are the common locations of Burp's Chrome executable:
 ### Windows

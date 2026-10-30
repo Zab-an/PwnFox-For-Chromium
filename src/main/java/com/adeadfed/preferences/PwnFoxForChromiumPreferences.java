@@ -7,12 +7,14 @@ public class PwnFoxForChromiumPreferences {
     public BrowserPathPreference browserPath;
     public ProfilesDirPreference profilesDir;
     public ProfileNamesPreference profileNames;
+    public BurpBrowserDataPreference burpBrowserData;
 
     public PwnFoxForChromiumPreferences(Preferences montoyaPreferences) throws Exception {
         this.montoyaPreferences = montoyaPreferences;
         this.browserPath = new BrowserPathPreference();
         this.profilesDir = new ProfilesDirPreference();
         this.profileNames = new ProfileNamesPreference();
+        this.burpBrowserData = new BurpBrowserDataPreference();
 
         initDefaultPreferences();
     }
@@ -26,6 +28,12 @@ public class PwnFoxForChromiumPreferences {
         }
         if (!preferenceExists(profilesDir.getPersistentKey())) {
             set(profilesDir, profilesDir.getDefault());
+        }
+        if (!preferenceExists(burpBrowserData.getPersistentKey())) {
+            String defaultBurpBrowserData = burpBrowserData.getDefault();
+            if (defaultBurpBrowserData != null) {
+                set(burpBrowserData, defaultBurpBrowserData);
+            }
         }
     }
 

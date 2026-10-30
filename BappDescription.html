@@ -19,6 +19,7 @@
     </ul>
   </li>
   <li>Optionally, define a custom directory for profile data to keep session files separate across projects.</li>
+  <li>Optionally, set the path to Burp's browser data directory. It is filled in automatically with Burp's default folder (<code class="InlineCode">~/.BurpSuite/pre-wired-browser</code>, or <code class="InlineCode">%APPDATA%\BurpSuite\pre-wired-browser</code> on Windows) and can be changed if another folder is set in Burp. On every launch, each profile takes the Burp browser's extensions with their settings, its browser settings and its bookmarks, and loads Burp's built-in extensions such as DOM Invader. Cookies, logins, history and autofill data are never carried over.</li>
   <li>Click a profile button to launch a Chromium instance tied to that profile. Each profile uses a distinct user data directory, maintaining separate cookies, sessions, and history.</li>
   <li>Inside the browser, use the included Proxy Settings Editor to configure proxy behavior. This allows fine-grained control and ensures traffic flows correctly through Burp Suite.</li>
   <li>Burp Suite will automatically highlight HTTP traffic in the Proxy tab using the color theme associated with the active profile, making it easy to distinguish traffic sources.</li>

@@ -40,6 +40,8 @@ public class PwnFoxForChromiumUI {
     private JLabel helpLabel;
     private JButton resetProfileNamesButton;
     private JButton locateBurpBrowserButton;
+    private JTextField burpBrowserDataPath;
+    private JButton chooseBurpBrowserDataButton;
 
     public JPanel getUI() {
         return ui;
@@ -194,6 +196,13 @@ public class PwnFoxForChromiumUI {
                 profileName 
             );
             try {
+                browser.copyBurpBrowserData(burpBrowserDataPath.getText());
+            } catch (Exception e) {
+                pwnChromiumExtension.montoyaApi.logging().logToOutput(
+                    "PwnFox For Chromium - Burp browser data not carried over: " + e
+                );
+            }
+            try {
                 Process process = browser.start();
                 pwnChromiumExtension.montoyaApi.logging().logToOutput(
                     String.format("PwnChromium %s started with PID: %d", profileColor, process.pid())
@@ -229,6 +238,15 @@ public class PwnFoxForChromiumUI {
             JFileChooser.DIRECTORIES_ONLY
         );
 
+        // optional: an empty path launches profiles without the Burp browser's data
+        setupUiPathField(
+            pwnChromiumExtension.pwnChromiumPreferences.burpBrowserData,
+            chooseBurpBrowserDataButton,
+            burpBrowserDataPath,
+            new TextFieldVerifier(path -> path.isEmpty() || FsValidator.isDirValid(path)),
+            JFileChooser.DIRECTORIES_ONLY
+        );
+
         setupProfileButtons();
         setupRenameHelpLabel();
 
@@ -255,7 +273,7 @@ public class PwnFoxForChromiumUI {
         ui = new JPanel();
         ui.setLayout(new GridLayoutManager(5, 4, new Insets(30, 30, 30, 30), -1, -1));
         settingsPanel = new JPanel();
-        settingsPanel.setLayout(new GridLayoutManager(6, 4, new Insets(20, 0, 0, 0), -1, -1));
+        settingsPanel.setLayout(new GridLayoutManager(8, 4, new Insets(20, 0, 0, 0), -1, -1));
         ui.add(settingsPanel, new GridConstraints(4, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         label1.setText("Path to the browser executable");
@@ -268,7 +286,7 @@ public class PwnFoxForChromiumUI {
         chooseExeButton.setText("Choose...");
         settingsPanel.add(chooseExeButton, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        settingsPanel.add(spacer1, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        settingsPanel.add(spacer1, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         settingsPanel.add(spacer2, new GridConstraints(2, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
@@ -289,6 +307,16 @@ public class PwnFoxForChromiumUI {
         locateBurpBrowserButton = new JButton();
         locateBurpBrowserButton.setText("Locate Burp Browser");
         settingsPanel.add(locateBurpBrowserButton, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label5 = new JLabel();
+        label5.setText("Path to the Burp browser data directory");
+        settingsPanel.add(label5, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        burpBrowserDataPath = new JTextField();
+        burpBrowserDataPath.setEditable(true);
+        burpBrowserDataPath.setEnabled(true);
+        settingsPanel.add(burpBrowserDataPath, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        chooseBurpBrowserDataButton = new JButton();
+        chooseBurpBrowserDataButton.setText("Choose...");
+        settingsPanel.add(chooseBurpBrowserDataButton, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new GridLayoutManager(2, 4, new Insets(0, 0, 0, 0), -1, -1));
         ui.add(buttonsPanel, new GridConstraints(1, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -379,6 +407,7 @@ public class PwnFoxForChromiumUI {
         ui.add(spacer5, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         label1.setLabelFor(pwnChromeExePath);
         label3.setLabelFor(pwnChromeProfilesPath);
+        label5.setLabelFor(burpBrowserDataPath);
     }
 
     /**
